@@ -18,9 +18,7 @@ class LActivity : AppCompatActivity() {
         super.onCreate(savedInstanceState)
         binding = ActivityLBinding.inflate(layoutInflater)
         setContentView(binding.root)
-
         navigateToTheMenu()
-
     }
 
     private fun navigateToTheMenu() {

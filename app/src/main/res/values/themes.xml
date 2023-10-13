@@ -10,7 +10,7 @@
 
     <style name="CustomSplash" parent="Theme.SplashScreen">
         <item name="windowSplashScreenBackground">@color/black</item>
-        <item name="windowSplashScreenAnimatedIcon">@drawable/element_4</item>
+        <item name="windowSplashScreenAnimatedIcon">@drawable/zxzxf</item>
         <item name="postSplashScreenTheme">@style/Theme.JokerSplash</item>
     </style>
 
