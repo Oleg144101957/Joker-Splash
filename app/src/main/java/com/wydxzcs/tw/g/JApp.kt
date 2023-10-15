@@ -1,8 +1,12 @@
 package com.wydxzcs.tw.g
 
 import android.app.Application
+import android.util.Log
 import com.wydxzcs.tw.g.di.AppComponent
 import com.wydxzcs.tw.g.di.DaggerAppComponent
+import com.wydxzcs.tw.g.di.DomainModule
+import com.wydxzcs.tw.g.domain.featurecases.FirstTimeUseCase
+import javax.inject.Inject
 
 class JApp : Application() {
 
@@ -10,8 +14,9 @@ class JApp : Application() {
 
     override fun onCreate() {
         super.onCreate()
-
-        appComponent = DaggerAppComponent.builder().
-
+        appComponent = DaggerAppComponent
+            .builder()
+            .domainModule(DomainModule())
+            .build()
     }
 }
