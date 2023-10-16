@@ -14,6 +14,7 @@ class JApp : Application() {
 
     override fun onCreate() {
         super.onCreate()
+
         appComponent = DaggerAppComponent
             .builder()
             .domainModule(DomainModule())

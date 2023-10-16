@@ -3,4 +3,5 @@
     <string name="your_screen_is_almost_ready">Your screen is almost ready...</string>
     <string name="play_game">Play Game</string>
     <string name="exit">Exit</string>
+    <string name="points_0">Points: 0</string>
 </resources>

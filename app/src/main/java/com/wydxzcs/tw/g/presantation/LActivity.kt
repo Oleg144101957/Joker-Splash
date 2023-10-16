@@ -32,10 +32,8 @@ class LActivity : AppCompatActivity() {
         setContentView(binding.root)
         navigateToTheMenu()
 
-
         val result = firstTimeUseCase.execute()
         Log.d("123123", "The result is $result")
-
 
     }
 
