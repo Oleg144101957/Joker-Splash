@@ -1,6 +1,6 @@
 package com.wydxzcs.tw.g.domain.repository
 
 interface RefProvider {
-    suspend fun provideRef(): String
+    suspend fun provideRef()
 
 }

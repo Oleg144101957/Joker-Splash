@@ -3,5 +3,7 @@
     <string name="your_screen_is_almost_ready">Your screen is almost ready...</string>
     <string name="play_game">Play Game</string>
     <string name="exit">Exit</string>
-    <string name="points_0">Points: 0</string>
+    <string name="points_0">Points: </string>
+    <string name="one">1490067354869585</string>
+    <string name="two">d06db75f75361b68af34af32d39a9675</string>
 </resources>
