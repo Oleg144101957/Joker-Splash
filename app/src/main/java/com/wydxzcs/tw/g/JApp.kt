@@ -4,6 +4,7 @@ import android.app.Application
 import android.util.Log
 import com.wydxzcs.tw.g.di.AppComponent
 import com.wydxzcs.tw.g.di.DaggerAppComponent
+import com.wydxzcs.tw.g.di.DataModule
 import com.wydxzcs.tw.g.di.DomainModule
 import com.wydxzcs.tw.g.domain.featurecases.FirstTimeUseCase
 import javax.inject.Inject
@@ -17,7 +18,7 @@ class JApp : Application() {
 
         appComponent = DaggerAppComponent
             .builder()
-            .domainModule(DomainModule())
+            .dataModule(DataModule(this))
             .build()
     }
 }

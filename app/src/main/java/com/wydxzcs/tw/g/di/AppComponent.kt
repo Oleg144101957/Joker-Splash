@@ -4,7 +4,7 @@ import com.wydxzcs.tw.g.presantation.LActivity
 import dagger.Component
 
 
-@Component(modules = [DomainModule::class])
+@Component(modules = [DataModule::class, DomainModule::class])
 interface AppComponent {
     fun inject(lActivity: LActivity)
 
