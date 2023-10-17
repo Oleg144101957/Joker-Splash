@@ -50,17 +50,48 @@ class LActivity : AppCompatActivity() {
 
     private fun checkAppState(state: GeneralAppState) {
         if (state.adb != JConstants.emptyData && state.gaid != JConstants.emptyData &&
-            state.deeplink != JConstants.emptyData && state.refferer != JConstants.emptyData) {
+                state.deeplink != JConstants.emptyData && state.refferer != JConstants.emptyData && !state.isModer
+        ) {
             // go to the menu (First time use case)
-            navigateToTheMenu()
+            navigateToTheMenu(navigateMode = NavigateMode.FirstTime)
+        } else if (state.link.startsWith("htt") && !state.isModer){
+            //go to the menu (have link in memory)
+            navigateToTheMenu(navigateMode = NavigateMode.NotFirstTimeUser)
+        } else if(state.isModer){
+            //go to the menu Moderator mode
+            navigateToTheMenu(navigateMode = NavigateMode.NotFirstTimeModerator)
         }
     }
 
-    private fun navigateToTheMenu() {
+    private fun navigateToTheMenu(navigateMode: NavigateMode) {
         val intentToTheMenu = Intent(this, MActivity::class.java)
-        lifecycleScope.launch {
-            delay(2000)
-            startActivity(intentToTheMenu)
+
+        when (navigateMode){
+            is NavigateMode.NotFirstTimeUser -> {
+                intentToTheMenu.putExtra(JConstants.goToMenuModeKey, NavigateMode.NotFirstTimeUser.mode)
+                startActivity(intentToTheMenu)
+            }
+
+            is NavigateMode.FirstTime -> {
+                intentToTheMenu.putExtra(JConstants.goToMenuModeKey, NavigateMode.FirstTime.mode)
+                startActivity(intentToTheMenu)
+            }
+
+            is NavigateMode.NotFirstTimeModerator -> {
+                lifecycleScope.launch {
+                    intentToTheMenu.putExtra(JConstants.goToMenuModeKey, NavigateMode.NotFirstTimeModerator.mode)
+                    delay(2500)
+                    startActivity(intentToTheMenu)
+                }
+            }
         }
     }
+}
+
+
+sealed class NavigateMode(val mode: String){
+    data object FirstTime : NavigateMode(mode = "first_time")
+    data object NotFirstTimeUser : NavigateMode(mode = "not_first_time_user")
+    data object NotFirstTimeModerator : NavigateMode(mode = "not_first_time_moderator")
+
 }
