@@ -5,8 +5,9 @@ import com.wydxzcs.tw.g.domain.models.GeneralAppState
 import com.wydxzcs.tw.g.domain.repository.GeneralAppStateRepository
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.StateFlow
+import javax.inject.Inject
 
-class GeneralAppStateRepositoryImpl(val context: Context ) : GeneralAppStateRepository {
+class GeneralAppStateRepositoryImpl @Inject constructor (val context: Context ) : GeneralAppStateRepository {
 
     private val mutableStatusFlow = MutableStateFlow(GeneralAppState())
     val statusFlow: StateFlow<GeneralAppState> = mutableStatusFlow
@@ -25,6 +26,10 @@ class GeneralAppStateRepositoryImpl(val context: Context ) : GeneralAppStateRepo
 
     override fun saveDeeplink(deeplink: String){
         mutableStatusFlow.value = mutableStatusFlow.value.copy(deeplink = deeplink)
+    }
+
+    override fun saveGaid(gaid: String) {
+        mutableStatusFlow.value = mutableStatusFlow.value.copy(gaid = gaid)
     }
 
     override fun saveIsModer(isModer: Boolean){
