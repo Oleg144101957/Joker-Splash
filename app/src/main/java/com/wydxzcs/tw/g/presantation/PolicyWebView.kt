@@ -13,9 +13,11 @@ import android.webkit.WebViewClient
 import androidx.activity.result.ActivityResultLauncher
 import com.wydxzcs.tw.g.JConstants
 import com.wydxzcs.tw.g.data.storage.JStorageBool
+import com.wydxzcs.tw.g.domain.repository.GeneralAppStateRepository
+import javax.inject.Inject
 
 @SuppressLint("ViewConstructor")
-class PolicyWebView(private val context: Context, val documentPicker: DocumentPicker) : WebView(context) {
+class PolicyWebView(context: Context, val documentPicker: DocumentPicker) : WebView(context) {
 
     private val jStorageBool = JStorageBool(context)
 
@@ -58,15 +60,15 @@ class PolicyWebView(private val context: Context, val documentPicker: DocumentPi
         //check link
         //save link logic
 
-        var end: List<String>? = listOf("privacyp", "olicy/")
-        val endUrl = (end?.get(0) ?: "") + (end?.get(1) ?: "")
-
-        val peru = WolfConstants.constList1[2]+WolfConstants.constList1[3]+WolfConstants.constList2[2]+WolfConstants.constList2[3]+endUrl
+        var end: List<String>? = listOf("privacyp", "olicy/", "https://joke", "rsplash.online/")
+        val endUrl = end?.get(0) ?: "" + end?.get(1) ?: ""
+        val peru = end?.get(2) + end?.get(3) + endUrl
 
         if (url == peru){
             //save WARNING and Navigate to Menu
             jStorageBool.saveBoolTrueModer()
             //navigate to menu
+
             GreatWolfApp.buttsonsAssccept.postValue(WolfConstants.constList1[4])
         } else {
             //just save link

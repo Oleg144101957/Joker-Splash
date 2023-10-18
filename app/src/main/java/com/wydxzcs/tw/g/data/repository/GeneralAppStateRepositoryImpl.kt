@@ -11,17 +11,8 @@ import javax.inject.Inject
 class GeneralAppStateRepositoryImpl @Inject constructor(context: Context) :
     GeneralAppStateRepository {
 
-
-    //Inject using di later
-    private val jStorageBool = JStorageBool(context)
-
-
-
-
-
-
-
-
+    @Inject
+    lateinit var jStorageBool : JStorageBool
 
     private val mutableStatusFlow =
         MutableStateFlow(GeneralAppState(isModer = jStorageBool.readBool()))

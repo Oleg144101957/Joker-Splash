@@ -6,6 +6,7 @@ import com.wydxzcs.tw.g.data.repository.FBProviderImpl
 import com.wydxzcs.tw.g.data.repository.GaidProviderImpl
 import com.wydxzcs.tw.g.data.repository.GeneralAppStateRepositoryImpl
 import com.wydxzcs.tw.g.data.repository.RefProviderImpl
+import com.wydxzcs.tw.g.data.storage.JStorageBool
 import com.wydxzcs.tw.g.domain.repository.AdbProvider
 import com.wydxzcs.tw.g.domain.repository.FbProvider
 import com.wydxzcs.tw.g.domain.repository.GaidProvider
@@ -22,6 +23,12 @@ class DataModule(val context: Context) {
     @Provides
     fun provideContext(): Context {
         return context
+    }
+
+
+    @Provides
+    fun provideStorage(context: Context) : JStorageBool{
+        return JStorageBool(context = context)
     }
 
     @Provides
