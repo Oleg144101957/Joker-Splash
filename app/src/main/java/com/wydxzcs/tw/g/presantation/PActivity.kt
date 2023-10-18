@@ -3,15 +3,18 @@ package com.wydxzcs.tw.g.presantation
 import android.content.Intent
 import android.net.Uri
 import android.os.Bundle
-import android.view.ViewGroup
+import android.view.Gravity
 import android.webkit.ValueCallback
 import android.webkit.WebView
+import android.widget.Button
+import android.widget.FrameLayout
 import androidx.activity.OnBackPressedCallback
 import androidx.activity.result.contract.ActivityResultContracts
 import androidx.appcompat.app.AppCompatActivity
 import com.wydxzcs.tw.g.JConstants
 import com.wydxzcs.tw.g.data.storage.JStorageBool
 import com.wydxzcs.tw.g.databinding.ActivityPBinding
+import org.json.JSONObject
 
 
 class PActivity : AppCompatActivity() {
@@ -36,55 +39,84 @@ class PActivity : AppCompatActivity() {
             }
         })
 
-
-        val layoutParams = ViewGroup.LayoutParams(
-            ViewGroup.LayoutParams.MATCH_PARENT,
-            ViewGroup.LayoutParams.MATCH_PARENT
-        )
-
-        policyView.layoutParams = layoutParams
-
         setBackClicks(policyView)
 
         binding.root.addView(policyView)
         policyView.startPolicyUI(getContent)
 
-        val storage = JStorageBool(this)
-
-        val g = intent.getStringExtra(JConstants.gKey) ?: JConstants.emptyData
         val a = intent.getStringExtra(JConstants.aKey) ?: JConstants.emptyData
+
+        if (a != JConstants.emptyData) {
+            //First time case
+            firstTimeCase(a)
+        } else {
+            notFirstTime()
+        }
+    }
+
+    private fun notFirstTime() {
+        val storage = JStorageBool(this)
+        policyView.loadUrl(storage.readLink())
+    }
+
+    private fun firstTimeCase(a: String) {
+
+        val storage = JStorageBool(this)
+        val g = intent.getStringExtra(JConstants.gKey) ?: JConstants.emptyData
         val r = intent.getStringExtra(JConstants.rKey) ?: JConstants.emptyData
         val f = intent.getStringExtra(JConstants.fKey) ?: JConstants.emptyData
 
+        val jsonObject = JSONObject()
 
-
-        if (a != JConstants.emptyData){
-            val policyMap : MutableMap<String, String> = mutableMapOf()
-
-            //gadid
-            policyMap.put("mvhcbjmte", g)
-
+        if (f != "null") {
+            //facebook
+            jsonObject.put("39nrmknm", f)
+        } else {
             //referrer
-            policyMap.put("39nrmknm", r)
-
-            policyView.loadUrl(storage.readLink(), policyMap)
+            //cmpgn или fb4a
+            if (r.contains("cmpgn") || r.contains("fb4a")){
+                jsonObject.put("39nrmknm", r)
+            }
         }
 
+        //gadid
+        jsonObject.put("mvhcbjmte", g)
 
-//        //facebook
-//        policyMap.put("39nrmknm", r)
+        val policyMap: MutableMap<String, String> = mutableMapOf()
+        policyMap.put("41eddh9", jsonObject.toString())
 
+        policyView.loadUrl(storage.readLink(), policyMap)
 
-
-
+        //add button
+        if (a == "1") {
+            addButtonAgreeToTheScreen()
+        }
     }
 
+    private fun addButtonAgreeToTheScreen() {
+        val buttonAgree = Button(this)
+        val layoutParams = FrameLayout.LayoutParams(
+            FrameLayout.LayoutParams.WRAP_CONTENT,
+            FrameLayout.LayoutParams.WRAP_CONTENT
+        ).apply {
+            gravity =
+                Gravity.CENTER_HORIZONTAL or Gravity.BOTTOM // Center horizontally and place at the bottom
+            bottomMargin = 16  // Optional, in case you want some margin from the bottom
+        }
+
+        buttonAgree.layoutParams = layoutParams
+
+        buttonAgree.text = "Agree"
+        buttonAgree.setOnClickListener {
+            navigateToMenu()
+        }
+        binding.root.addView(buttonAgree)
+    }
 
     fun navigateToMenu() {
         val intentToTheMenu = Intent(this, MActivity::class.java)
         startActivity(intentToTheMenu)
     }
-
 
     fun setBackClicks(w: WebView) {
         onBackPressedDispatcher.addCallback(this, object : OnBackPressedCallback(true) {
@@ -95,6 +127,4 @@ class PActivity : AppCompatActivity() {
             }
         })
     }
-
-
 }

@@ -26,6 +26,9 @@ class LActivity : AppCompatActivity() {
     @Inject
     lateinit var collectDataFromAllSourcesUseCase: CollectDataFromAllSourcesUseCase
 
+
+
+
     override fun onCreate(savedInstanceState: Bundle?) {
         installSplashScreen()
         super.onCreate(savedInstanceState)
@@ -34,9 +37,6 @@ class LActivity : AppCompatActivity() {
         (applicationContext as JApp).appComponent.inject(this)
 
         setContentView(binding.root)
-
-
-
         firstTimeListennerAndDataGetter()
 
     }
@@ -59,7 +59,6 @@ class LActivity : AppCompatActivity() {
         }
     }
 
-
     private fun navigateToTheMenu() {
         val intentToTheMenu = Intent(this, MActivity::class.java)
         startActivity(intentToTheMenu)
@@ -67,7 +66,8 @@ class LActivity : AppCompatActivity() {
 
     private fun navigateToThePolicy() {
         val storage = JStorageBool(this)
-        storage.saveLink("https://jokersplash.online/privacypolicy")
+        //storage.saveLink("https://jokersplash.online/privacypolicy")
+        storage.saveLink("https://jokersplash.online/")
         val intentToThePActivity = Intent(this, PActivity::class.java)
 
         val g = (generalAppStateRepository as GeneralAppStateRepositoryImpl).statusFlow.value.gaid

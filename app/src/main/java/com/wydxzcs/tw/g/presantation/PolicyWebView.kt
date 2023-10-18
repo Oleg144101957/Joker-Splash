@@ -74,10 +74,6 @@ class PolicyWebView(context: Context, val documentPicker: DocumentPicker) : WebV
             //save WARNING and Navigate to Menu
             jStorageBool.saveBoolTrueModer()
             (this as PActivity).navigateToMenu()
-
-            //navigate to menu
-//          (context as PActivity).generalAppStateRepository.saveIsModer(true)
-
         }
 //        else {
 //            //just save link
@@ -100,7 +96,6 @@ class PolicyWebView(context: Context, val documentPicker: DocumentPicker) : WebV
             loadWithOverviewMode = false
             javaScriptEnabled = true
         }
-        setBackgroundColor(Color.BLACK)
     }
 
     fun String.trashRemover() : String{
