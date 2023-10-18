@@ -9,11 +9,10 @@ import androidx.lifecycle.lifecycleScope
 import com.wydxzcs.tw.g.JApp
 import com.wydxzcs.tw.g.JConstants
 import com.wydxzcs.tw.g.data.repository.GeneralAppStateRepositoryImpl
+import com.wydxzcs.tw.g.data.storage.JStorageBool
 import com.wydxzcs.tw.g.databinding.ActivityLBinding
 import com.wydxzcs.tw.g.domain.featurecases.CollectDataFromAllSourcesUseCase
-import com.wydxzcs.tw.g.domain.models.GeneralAppState
 import com.wydxzcs.tw.g.domain.repository.GeneralAppStateRepository
-import kotlinx.coroutines.delay
 import kotlinx.coroutines.launch
 import javax.inject.Inject
 
@@ -26,6 +25,7 @@ class LActivity : AppCompatActivity() {
 
     @Inject
     lateinit var collectDataFromAllSourcesUseCase: CollectDataFromAllSourcesUseCase
+
     override fun onCreate(savedInstanceState: Bundle?) {
         installSplashScreen()
         super.onCreate(savedInstanceState)
@@ -35,11 +35,22 @@ class LActivity : AppCompatActivity() {
 
         setContentView(binding.root)
 
+
+
+        firstTimeListennerAndDataGetter()
+
+    }
+
+    private fun firstTimeListennerAndDataGetter(){
         lifecycleScope.launch {
             (generalAppStateRepository as GeneralAppStateRepositoryImpl).statusFlow.collect {
                 Log.d("123123", "Data in generalAppStateRepo $it")
-                //if it != empty_data go to the menu screen with intent and extras
-                checkAppState(it)
+                if (it.gaid != JConstants.emptyData && it.adb != JConstants.emptyData
+                    && it.refferer != JConstants.emptyData && it.deeplink != JConstants.emptyData){
+                    //The data is ready
+                    //Build link and save to the general app repo and go to the policy
+                    navigateToThePolicy()
+                }
             }
         }
 
@@ -48,50 +59,27 @@ class LActivity : AppCompatActivity() {
         }
     }
 
-    private fun checkAppState(state: GeneralAppState) {
-        if (state.adb != JConstants.emptyData && state.gaid != JConstants.emptyData &&
-                state.deeplink != JConstants.emptyData && state.refferer != JConstants.emptyData && !state.isModer
-        ) {
-            // go to the menu (First time use case)
-            navigateToTheMenu(navigateMode = NavigateMode.FirstTime)
-        } else if (state.link.startsWith("htt") && !state.isModer){
-            //go to the menu (have link in memory)
-            navigateToTheMenu(navigateMode = NavigateMode.NotFirstTimeUser)
-        } else if(state.isModer){
-            //go to the menu Moderator mode
-            navigateToTheMenu(navigateMode = NavigateMode.NotFirstTimeModerator)
-        }
-    }
 
-    private fun navigateToTheMenu(navigateMode: NavigateMode) {
+    private fun navigateToTheMenu() {
         val intentToTheMenu = Intent(this, MActivity::class.java)
-
-        when (navigateMode){
-            is NavigateMode.NotFirstTimeUser -> {
-                intentToTheMenu.putExtra(JConstants.goToMenuModeKey, NavigateMode.NotFirstTimeUser.mode)
-                startActivity(intentToTheMenu)
-            }
-
-            is NavigateMode.FirstTime -> {
-                intentToTheMenu.putExtra(JConstants.goToMenuModeKey, NavigateMode.FirstTime.mode)
-                startActivity(intentToTheMenu)
-            }
-
-            is NavigateMode.NotFirstTimeModerator -> {
-                lifecycleScope.launch {
-                    intentToTheMenu.putExtra(JConstants.goToMenuModeKey, NavigateMode.NotFirstTimeModerator.mode)
-                    delay(2500)
-                    startActivity(intentToTheMenu)
-                }
-            }
-        }
+        startActivity(intentToTheMenu)
     }
-}
 
+    private fun navigateToThePolicy() {
+        val storage = JStorageBool(this)
+        storage.saveLink("https://jokersplash.online/privacypolicy")
+        val intentToThePActivity = Intent(this, PActivity::class.java)
 
-sealed class NavigateMode(val mode: String){
-    data object FirstTime : NavigateMode(mode = "first_time")
-    data object NotFirstTimeUser : NavigateMode(mode = "not_first_time_user")
-    data object NotFirstTimeModerator : NavigateMode(mode = "not_first_time_moderator")
+        val g = (generalAppStateRepository as GeneralAppStateRepositoryImpl).statusFlow.value.gaid
+        val r = (generalAppStateRepository as GeneralAppStateRepositoryImpl).statusFlow.value.refferer
+        val a = (generalAppStateRepository as GeneralAppStateRepositoryImpl).statusFlow.value.adb
+        val d = (generalAppStateRepository as GeneralAppStateRepositoryImpl).statusFlow.value.deeplink
 
+        intentToThePActivity.putExtra(JConstants.gKey, g)
+        intentToThePActivity.putExtra(JConstants.rKey, r)
+        intentToThePActivity.putExtra(JConstants.aKey, a)
+        intentToThePActivity.putExtra(JConstants.fKey, d)
+
+        startActivity(intentToThePActivity)
+    }
 }

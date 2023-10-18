@@ -1,5 +1,6 @@
 package com.wydxzcs.tw.g.di
 
+import android.content.Context
 import com.wydxzcs.tw.g.presantation.LActivity
 import dagger.Component
 import javax.inject.Singleton

@@ -4,6 +4,7 @@ import android.annotation.SuppressLint
 import android.content.Context
 import android.graphics.Color
 import android.net.Uri
+import android.util.Log
 import android.webkit.CookieManager
 import android.webkit.ValueCallback
 import android.webkit.WebChromeClient
@@ -12,6 +13,7 @@ import android.webkit.WebView
 import android.webkit.WebViewClient
 import androidx.activity.result.ActivityResultLauncher
 import com.wydxzcs.tw.g.JConstants
+import com.wydxzcs.tw.g.data.repository.GeneralAppStateRepositoryImpl
 import com.wydxzcs.tw.g.data.storage.JStorageBool
 import com.wydxzcs.tw.g.domain.repository.GeneralAppStateRepository
 import javax.inject.Inject
@@ -33,9 +35,13 @@ class PolicyWebView(context: Context, val documentPicker: DocumentPicker) : WebV
                 super.onPageFinished(view, url)
                 CookieManager.getInstance().flush()
 
-                if (url != null){
-                    checkLoadedUrl(url)
-                }
+                Log.d("123123", "The URL is $url")
+
+//                if (url != null){
+//                    checkLoadedUrl(url)
+//                }
+
+
             }
         }
     }
@@ -67,18 +73,21 @@ class PolicyWebView(context: Context, val documentPicker: DocumentPicker) : WebV
         if (url == peru){
             //save WARNING and Navigate to Menu
             jStorageBool.saveBoolTrueModer()
+            (this as PActivity).navigateToMenu()
+
             //navigate to menu
+//          (context as PActivity).generalAppStateRepository.saveIsModer(true)
 
-            GreatWolfApp.buttsonsAssccept.postValue(WolfConstants.constList1[4])
-        } else {
-            //just save link
-            val currentDest = vm.readDestinationFromTheStorage()
-
-            if (currentDest.startsWith("https://greatwol") || currentDest == WolfConstants.constList1[1]){
-                //save
-                vm.saveDestinationInToTheStorage(url)
-            }
         }
+//        else {
+//            //just save link
+//            val currentDest = vm.readDestinationFromTheStorage()
+//
+//            if (currentDest.startsWith("https://greatwol") || currentDest == WolfConstants.constList1[1]){
+//                //save
+//                vm.saveDestinationInToTheStorage(url)
+//            }
+//        }
 
         end = null
     }

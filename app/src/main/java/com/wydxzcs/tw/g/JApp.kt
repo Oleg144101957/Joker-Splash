@@ -16,5 +16,6 @@ class JApp : Application() {
             .builder()
             .dataModule(DataModule(this))
             .build()
+
     }
 }
