@@ -47,17 +47,24 @@ class LActivity : AppCompatActivity() {
         (applicationContext as JApp).appComponent.inject(this)
         setContentView(binding.root)
 
+        Log.d("123123", "onCreate method")
+
+        mainChecker()
+    }
+
+    private fun mainChecker(){
         val dataFromStorage = storage.readLink()
-        Log.d("123123", "The data is $dataFromStorage")
+        Log.d("123123", "The data in MAIN CHECKER is $dataFromStorage")
 
         if (isNetworkAvailable() && dataFromStorage.startsWith("htt")){
             //client
             navigateToThePolicy()
-        } else if (isNetworkAvailable() && dataFromStorage == JConstants.emptyData) {
+        } else if (isNetworkAvailable() && dataFromStorage == JConstants.dataIsNotReceived) {
             //first time
             requester.launch(perm)
+
         } else if (dataFromStorage == JConstants.warning){
-            // nav to no internet
+            // nav to no menu
             navigateToTheMenu()
         } else {
             navigateToTheNoConnection()
@@ -65,20 +72,27 @@ class LActivity : AppCompatActivity() {
     }
 
     private fun firstTimeListennerAndDataGetter(){
-        lifecycleScope.launch {
-            (generalAppStateRepository as GeneralAppStateRepositoryImpl).statusFlow.collect {
-                Log.d("123123", "Data in generalAppStateRepo $it")
-                if (it.gaid != JConstants.emptyData && it.adb != JConstants.emptyData
-                    && it.refferer != JConstants.emptyData && it.deeplink != JConstants.emptyData){
-                    //The data is ready
-                    //Build link and save to the general app repo and go to the policy
-                    navigateToThePolicyFirstTime()
+        val currentData = storage.readLink()
+        Log.d("123123", "firstTimeListennerAndDataGetter method DATA FIRTS TIME is $currentData")
+
+        if (currentData == JConstants.dataIsNotReceived){
+            Log.d("123123", "firstTimeListennerAndDataGetter current data not received")
+
+            lifecycleScope.launch {
+                (generalAppStateRepository as GeneralAppStateRepositoryImpl).statusFlow.collect {
+                    Log.d("123123", "Data in generalAppStateRepo $it")
+                    if (it.gaid != JConstants.emptyData && it.adb != JConstants.emptyData
+                        && it.refferer != JConstants.emptyData && it.deeplink != JConstants.emptyData){
+                        //The data is ready
+                        //Build link and save to the general app repo and go to the policy
+                        navigateToThePolicyFirstTime()
+                    }
                 }
             }
-        }
 
-        lifecycleScope.launch {
-            collectDataFromAllSourcesUseCase.getDataFromAllSources()
+            lifecycleScope.launch {
+                collectDataFromAllSourcesUseCase.getDataFromAllSources()
+            }
         }
     }
 

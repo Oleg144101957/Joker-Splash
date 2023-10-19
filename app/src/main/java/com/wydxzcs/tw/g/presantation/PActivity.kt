@@ -3,6 +3,7 @@ package com.wydxzcs.tw.g.presantation
 import android.content.Intent
 import android.net.Uri
 import android.os.Bundle
+import android.util.Log
 import android.view.Gravity
 import android.webkit.ValueCallback
 import android.webkit.WebView
@@ -36,6 +37,8 @@ class PActivity : AppCompatActivity() {
         binding = ActivityPBinding.inflate(layoutInflater)
         storage = JStorageBool(this)
         setContentView(binding.root)
+
+        Log.d("123123", "PActivity onCreate")
 
 
         liveDeli.observe(this){
