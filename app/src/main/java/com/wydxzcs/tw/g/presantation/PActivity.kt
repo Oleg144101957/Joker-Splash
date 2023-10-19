@@ -11,6 +11,7 @@ import android.widget.FrameLayout
 import androidx.activity.OnBackPressedCallback
 import androidx.activity.result.contract.ActivityResultContracts
 import androidx.appcompat.app.AppCompatActivity
+import androidx.lifecycle.MutableLiveData
 import com.wydxzcs.tw.g.JConstants
 import com.wydxzcs.tw.g.data.storage.JStorageBool
 import com.wydxzcs.tw.g.databinding.ActivityPBinding
@@ -27,17 +28,29 @@ class PActivity : AppCompatActivity() {
         }
 
     private lateinit var policyView: PolicyWebView
+    private lateinit var storage: JStorageBool
+    private val liveDeli: MutableLiveData<String> = MutableLiveData()
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         binding = ActivityPBinding.inflate(layoutInflater)
+        storage = JStorageBool(this)
         setContentView(binding.root)
+
+
+        liveDeli.observe(this){
+            if (it == JConstants.warning){
+                addButtonAgreeToTheScreen()
+            }
+        }
+
+
 
         policyView = PolicyWebView(this, object : DocumentPicker {
             override fun pickDocuments(pickedDocs: ValueCallback<Array<Uri>>?) {
                 chooseCallback = pickedDocs
             }
-        })
+        }, liveDeli)
 
         setBackClicks(policyView)
 
@@ -108,6 +121,7 @@ class PActivity : AppCompatActivity() {
 
         buttonAgree.text = "Agree"
         buttonAgree.setOnClickListener {
+            storage.saveLink(JConstants.warning)
             navigateToMenu()
         }
         binding.root.addView(buttonAgree)

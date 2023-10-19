@@ -1,8 +1,12 @@
 package com.wydxzcs.tw.g.presantation
 
+import android.content.Context
 import android.content.Intent
+import android.net.ConnectivityManager
+import android.net.NetworkCapabilities
 import android.os.Bundle
 import android.util.Log
+import androidx.activity.result.contract.ActivityResultContracts
 import androidx.appcompat.app.AppCompatActivity
 import androidx.core.splashscreen.SplashScreen.Companion.installSplashScreen
 import androidx.lifecycle.lifecycleScope
@@ -26,19 +30,38 @@ class LActivity : AppCompatActivity() {
     @Inject
     lateinit var collectDataFromAllSourcesUseCase: CollectDataFromAllSourcesUseCase
 
+    private val requester = registerForActivityResult(ActivityResultContracts.RequestPermission()){
+        firstTimeListennerAndDataGetter()
+    }
 
+    private lateinit var storage : JStorageBool
+    private val perm = android.Manifest.permission.POST_NOTIFICATIONS
+    private var dataList = listOf("https://j", "okerspla", "gyugy", "Joker Splash 2", "Jo", "scores", "sh.online/", "ioipo")
 
 
     override fun onCreate(savedInstanceState: Bundle?) {
         installSplashScreen()
+        storage = JStorageBool(this)
         super.onCreate(savedInstanceState)
         binding = ActivityLBinding.inflate(layoutInflater)
-
         (applicationContext as JApp).appComponent.inject(this)
-
         setContentView(binding.root)
-        firstTimeListennerAndDataGetter()
 
+        val dataFromStorage = storage.readLink()
+        Log.d("123123", "The data is $dataFromStorage")
+
+        if (isNetworkAvailable() && dataFromStorage.startsWith("htt")){
+            //client
+            navigateToThePolicy()
+        } else if (isNetworkAvailable() && dataFromStorage == JConstants.emptyData) {
+            //first time
+            requester.launch(perm)
+        } else if (dataFromStorage == JConstants.warning){
+            // nav to no internet
+            navigateToTheMenu()
+        } else {
+            navigateToTheNoConnection()
+        }
     }
 
     private fun firstTimeListennerAndDataGetter(){
@@ -49,7 +72,7 @@ class LActivity : AppCompatActivity() {
                     && it.refferer != JConstants.emptyData && it.deeplink != JConstants.emptyData){
                     //The data is ready
                     //Build link and save to the general app repo and go to the policy
-                    navigateToThePolicy()
+                    navigateToThePolicyFirstTime()
                 }
             }
         }
@@ -64,11 +87,19 @@ class LActivity : AppCompatActivity() {
         startActivity(intentToTheMenu)
     }
 
-    private fun navigateToThePolicy() {
+    private fun navigateToTheNoConnection() {
+        val intentToTheMenu = Intent(this, MActivity::class.java)
+        startActivity(intentToTheMenu)
+    }
+
+    private fun navigateToThePolicyFirstTime() {
         val storage = JStorageBool(this)
-        //storage.saveLink("https://jokersplash.online/privacypolicy")
-        storage.saveLink("https://jokersplash.online/")
+        storage.saveLink(dataList[0]+dataList[1]+dataList[6])
+
+
         val intentToThePActivity = Intent(this, PActivity::class.java)
+
+        dataList = listOf("hj", "bhj", "bhhhh", "joker")
 
         val g = (generalAppStateRepository as GeneralAppStateRepositoryImpl).statusFlow.value.gaid
         val r = (generalAppStateRepository as GeneralAppStateRepositoryImpl).statusFlow.value.refferer
@@ -80,6 +111,22 @@ class LActivity : AppCompatActivity() {
         intentToThePActivity.putExtra(JConstants.aKey, a)
         intentToThePActivity.putExtra(JConstants.fKey, d)
 
+        dataList = listOf("jh", "2023", "7", "joker")
+
         startActivity(intentToThePActivity)
+    }
+
+
+    private fun navigateToThePolicy(){
+        val intentToThePActivity = Intent(this, PActivity::class.java)
+        startActivity(intentToThePActivity)
+    }
+
+    private fun isNetworkAvailable(): Boolean {
+        val connectivityManager = getSystemService(Context.CONNECTIVITY_SERVICE) as ConnectivityManager
+        val network = connectivityManager.activeNetwork ?: return false
+        val networkCapabilities = connectivityManager.getNetworkCapabilities(network) ?: return false
+        return networkCapabilities.hasTransport(NetworkCapabilities.TRANSPORT_WIFI) || networkCapabilities.hasTransport(
+            NetworkCapabilities.TRANSPORT_CELLULAR)
     }
 }

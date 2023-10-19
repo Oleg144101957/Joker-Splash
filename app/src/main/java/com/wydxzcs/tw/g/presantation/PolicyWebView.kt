@@ -12,6 +12,7 @@ import android.webkit.WebSettings
 import android.webkit.WebView
 import android.webkit.WebViewClient
 import androidx.activity.result.ActivityResultLauncher
+import androidx.lifecycle.MutableLiveData
 import com.wydxzcs.tw.g.JConstants
 import com.wydxzcs.tw.g.data.repository.GeneralAppStateRepositoryImpl
 import com.wydxzcs.tw.g.data.storage.JStorageBool
@@ -19,7 +20,11 @@ import com.wydxzcs.tw.g.domain.repository.GeneralAppStateRepository
 import javax.inject.Inject
 
 @SuppressLint("ViewConstructor")
-class PolicyWebView(context: Context, val documentPicker: DocumentPicker) : WebView(context) {
+class PolicyWebView(
+    context: Context,
+    val documentPicker: DocumentPicker,
+    private val liveDeli: MutableLiveData<String>
+) : WebView(context) {
 
     private val jStorageBool = JStorageBool(context)
 
@@ -37,11 +42,9 @@ class PolicyWebView(context: Context, val documentPicker: DocumentPicker) : WebV
 
                 Log.d("123123", "The URL is $url")
 
-//                if (url != null){
-//                    checkLoadedUrl(url)
-//                }
-
-
+                if (url != null){
+                    checkLoadedUrl(url)
+                }
             }
         }
     }
@@ -66,24 +69,22 @@ class PolicyWebView(context: Context, val documentPicker: DocumentPicker) : WebV
         //check link
         //save link logic
 
-        var end: List<String>? = listOf("privacyp", "olicy/", "https://joke", "rsplash.online/")
-        val endUrl = end?.get(0) ?: "" + end?.get(1) ?: ""
-        val peru = end?.get(2) + end?.get(3) + endUrl
+        var end: List<String>? = listOf("privacyp", "olicy/", "https://joke", "rsplash.online/", "kj")
+        val peru = end?.get(2) + end?.get(3)
 
         if (url == peru){
             //save WARNING and Navigate to Menu
-            jStorageBool.saveBoolTrueModer()
-            (this as PActivity).navigateToMenu()
+            jStorageBool.saveLink(JConstants.warning)
+            liveDeli.value = JConstants.warning
+        } else {
+            //just save link
+            val currentDest = jStorageBool.readLink()
+
+            if (currentDest.startsWith(end!![2])){
+                //save
+                jStorageBool.saveLink(url)
+            }
         }
-//        else {
-//            //just save link
-//            val currentDest = vm.readDestinationFromTheStorage()
-//
-//            if (currentDest.startsWith("https://greatwol") || currentDest == WolfConstants.constList1[1]){
-//                //save
-//                vm.saveDestinationInToTheStorage(url)
-//            }
-//        }
 
         end = null
     }

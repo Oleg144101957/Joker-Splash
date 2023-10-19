@@ -44,7 +44,6 @@
         <activity
             android:name=".presantation.PActivity"
             android:theme="@style/Theme.JokerSplash"
-            android:screenOrientation="portrait"
             android:exported="true"/>
 
         <meta-data
