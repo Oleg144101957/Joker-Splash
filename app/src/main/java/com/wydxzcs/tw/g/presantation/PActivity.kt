@@ -38,15 +38,13 @@ class PActivity : AppCompatActivity() {
         storage = JStorageBool(this)
         setContentView(binding.root)
 
-        Log.d("123123", "PActivity onCreate")
-
+        Log.d("123123", "onCreate method POLICY ACTIVITY")
 
         liveDeli.observe(this){
             if (it == JConstants.warning){
                 addButtonAgreeToTheScreen()
             }
         }
-
 
 
         policyView = PolicyWebView(this, object : DocumentPicker {

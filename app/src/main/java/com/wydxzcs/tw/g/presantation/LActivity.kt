@@ -47,7 +47,7 @@ class LActivity : AppCompatActivity() {
         (applicationContext as JApp).appComponent.inject(this)
         setContentView(binding.root)
 
-        Log.d("123123", "onCreate method")
+        Log.d("123123", "onCreate method LOADING ACTIVITY")
 
         mainChecker()
     }
@@ -80,7 +80,6 @@ class LActivity : AppCompatActivity() {
 
             lifecycleScope.launch {
                 (generalAppStateRepository as GeneralAppStateRepositoryImpl).statusFlow.collect {
-                    Log.d("123123", "Data in generalAppStateRepo $it")
                     if (it.gaid != JConstants.emptyData && it.adb != JConstants.emptyData
                         && it.refferer != JConstants.emptyData && it.deeplink != JConstants.emptyData){
                         //The data is ready
