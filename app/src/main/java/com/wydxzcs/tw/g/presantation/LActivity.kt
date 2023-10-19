@@ -4,9 +4,11 @@ import android.content.Context
 import android.content.Intent
 import android.net.ConnectivityManager
 import android.net.NetworkCapabilities
+import android.os.Build
 import android.os.Bundle
 import android.util.Log
 import androidx.activity.result.contract.ActivityResultContracts
+import androidx.annotation.RequiresApi
 import androidx.appcompat.app.AppCompatActivity
 import androidx.core.splashscreen.SplashScreen.Companion.installSplashScreen
 import androidx.lifecycle.lifecycleScope
@@ -35,10 +37,12 @@ class LActivity : AppCompatActivity() {
     }
 
     private lateinit var storage : JStorageBool
+    @RequiresApi(Build.VERSION_CODES.TIRAMISU)
     private val perm = android.Manifest.permission.POST_NOTIFICATIONS
     private var dataList = listOf("https://j", "okerspla", "gyugy", "Joker Splash 2", "Jo", "scores", "sh.online/", "ioipo")
 
 
+    @RequiresApi(Build.VERSION_CODES.TIRAMISU)
     override fun onCreate(savedInstanceState: Bundle?) {
         installSplashScreen()
         storage = JStorageBool(this)
@@ -52,6 +56,7 @@ class LActivity : AppCompatActivity() {
         mainChecker()
     }
 
+    @RequiresApi(Build.VERSION_CODES.TIRAMISU)
     private fun mainChecker(){
         val dataFromStorage = storage.readLink()
 

@@ -6,6 +6,8 @@ import com.wydxzcs.tw.g.JConstants
 const val spName = "spName"
 const val boolKey = "boolKey"
 const val linkKey = "linkKey"
+const val isShowDialogKey = "isShowDialog"
+const val activeMinutesKey = "activeMinutesKey"
 
 class JStorageBool(context: Context) {
 
@@ -26,4 +28,21 @@ class JStorageBool(context: Context) {
     fun readLink() : String{
         return sp.getString(linkKey, JConstants.dataIsNotReceived) ?: JConstants.dataIsNotReceived
     }
+
+    fun saveIsShowDialog(isShow: Boolean){
+        sp.edit().putBoolean(isShowDialogKey, isShow).apply()
+    }
+
+    fun readDataIsShow() : Boolean{
+        return sp.getBoolean(isShowDialogKey, true)
+    }
+
+    fun saveActiveMinutes(minutes: Long){
+        sp.edit().putLong(activeMinutesKey, minutes).apply()
+    }
+
+    fun readActiveMinutes(): Long{
+        return sp.getLong(activeMinutesKey, 0L)
+    }
+
 }

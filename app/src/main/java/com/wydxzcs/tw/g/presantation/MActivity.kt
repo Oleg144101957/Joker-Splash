@@ -26,25 +26,6 @@ class MActivity : AppCompatActivity() {
         setClickListennersForTheButtons()
     }
 
-//    private fun checkModeStatus(mode: String) {
-//        when(mode){
-//            NavigateMode.FirstTime.mode -> {
-//                // build link and open WebView here
-//                buildLink()
-//            }
-//
-//            NavigateMode.NotFirstTimeUser.mode -> {
-//                // read link and open webview
-//                readSavedLinkAndOpenPolicy()
-//            }
-//
-//            NavigateMode.NotFirstTimeModerator.mode -> {
-//                // just open menu, no Web View
-//                //do nothing
-//            }
-//        }
-//    }
-
     private fun setClickListennersForTheButtons() {
         binding.btnPlay.setOnClickListener {
             playGame()
@@ -56,12 +37,19 @@ class MActivity : AppCompatActivity() {
     }
 
     private fun exitJokerSplash() {
-        val intentToExitApp = Intent(Intent.ACTION_MAIN)
-        intentToExitApp.addCategory(Intent.CATEGORY_HOME)
-        intentToExitApp.flags = Intent.FLAG_ACTIVITY_CLEAR_TOP
-        startActivity(intentToExitApp)
-        finish()
-        exitProcess(0)
+        finishAffinity()
+
+//        val intent = Intent(this, LActivity::class.java)
+//        intent.flags = Intent.FLAG_ACTIVITY_NEW_TASK or Intent.FLAG_ACTIVITY_CLEAR_TASK
+//        startActivity(intent)
+//        finish()
+
+//        val intentToExitApp = Intent(Intent.ACTION_MAIN)
+//        intentToExitApp.addCategory(Intent.CATEGORY_HOME)
+//        intentToExitApp.flags = Intent.FLAG_ACTIVITY_CLEAR_TOP
+//        startActivity(intentToExitApp)
+//        finish()
+//        exitProcess(0)
     }
 
     private fun playGame() {
