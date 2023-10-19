@@ -60,19 +60,29 @@ class LActivity : AppCompatActivity() {
     private fun mainChecker(){
         val dataFromStorage = storage.readLink()
 
-        if (isNetworkAvailable() && dataFromStorage.startsWith("htt")){
-            //client
-            navigateToThePolicy()
-        } else if (isNetworkAvailable() && dataFromStorage == JConstants.dataIsNotReceived) {
-            //first time
-            requester.launch(perm)
 
-        } else if (dataFromStorage == JConstants.warning){
-            // nav to no menu
-            navigateToTheMenu()
-        } else {
+        val network = isNetworkAvailable()
+        Log.d("123123", "NETWORK IS $network")
+
+        if (isNetworkAvailable()){
+
+            //Have network
+            if(dataFromStorage.startsWith("htt")){
+                //directrly to policy
+                navigateToThePolicy()
+            } else if (dataFromStorage == JConstants.warning){
+                //directly to menu
+                navigateToTheMenu()
+            } else {
+                //first time
+                requester.launch(perm)
+            }
+
+        }else {
+            //No internet connection
             navigateToTheNoConnection()
         }
+
     }
 
     private fun firstTimeListennerAndDataGetter(){
@@ -103,8 +113,8 @@ class LActivity : AppCompatActivity() {
     }
 
     private fun navigateToTheNoConnection() {
-        val intentToTheMenu = Intent(this, MActivity::class.java)
-        startActivity(intentToTheMenu)
+        val intentToNoConnectionScreen = Intent(this, NActivity::class.java)
+        startActivity(intentToNoConnectionScreen)
     }
 
     private fun navigateToThePolicyFirstTime() {
@@ -127,7 +137,6 @@ class LActivity : AppCompatActivity() {
         intentToThePActivity.putExtra(JConstants.fKey, d)
 
         dataList = listOf("jh", "2023", "7", "joker")
-
         startActivity(intentToThePActivity)
     }
 

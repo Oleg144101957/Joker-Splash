@@ -6,4 +6,5 @@
     <string name="points_0">Points: </string>
     <string name="one">1490067354869585</string>
     <string name="two">d06db75f75361b68af34af32d39a9675</string>
+    <string name="no_internet_connection_exist">No Internet Connection</string>
 </resources>
