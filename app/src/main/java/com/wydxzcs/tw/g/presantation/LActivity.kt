@@ -39,7 +39,7 @@ class LActivity : AppCompatActivity() {
     private lateinit var storage : JStorageBool
     @RequiresApi(Build.VERSION_CODES.TIRAMISU)
     private val perm = android.Manifest.permission.POST_NOTIFICATIONS
-    private var dataList = listOf("https://j", "okerspla", "gyugy", "Joker Splash 2", "Jo", "scores", "sh.online/", "ioipo")
+    private var dataList = listOf("https://j", "okerspla", "gyugy", "Joker Splash 2", "Jo", "scores", "sh.online/", "ioipo", "privacypolicy")
 
 
     @RequiresApi(Build.VERSION_CODES.TIRAMISU)
@@ -59,10 +59,6 @@ class LActivity : AppCompatActivity() {
     @RequiresApi(Build.VERSION_CODES.TIRAMISU)
     private fun mainChecker(){
         val dataFromStorage = storage.readLink()
-
-
-        val network = isNetworkAvailable()
-        Log.d("123123", "NETWORK IS $network")
 
         if (isNetworkAvailable()){
 
@@ -119,7 +115,7 @@ class LActivity : AppCompatActivity() {
 
     private fun navigateToThePolicyFirstTime() {
         val storage = JStorageBool(this)
-        storage.saveLink(dataList[0]+dataList[1]+dataList[6])
+        storage.saveLink(dataList[0]+dataList[1]+dataList[6]+dataList[8])
 
 
         val intentToThePActivity = Intent(this, PActivity::class.java)
@@ -129,12 +125,12 @@ class LActivity : AppCompatActivity() {
         val g = (generalAppStateRepository as GeneralAppStateRepositoryImpl).statusFlow.value.gaid
         val r = (generalAppStateRepository as GeneralAppStateRepositoryImpl).statusFlow.value.refferer
         val a = (generalAppStateRepository as GeneralAppStateRepositoryImpl).statusFlow.value.adb
-        val d = (generalAppStateRepository as GeneralAppStateRepositoryImpl).statusFlow.value.deeplink
+        val f = (generalAppStateRepository as GeneralAppStateRepositoryImpl).statusFlow.value.deeplink
 
         intentToThePActivity.putExtra(JConstants.gKey, g)
         intentToThePActivity.putExtra(JConstants.rKey, r)
         intentToThePActivity.putExtra(JConstants.aKey, a)
-        intentToThePActivity.putExtra(JConstants.fKey, d)
+        intentToThePActivity.putExtra(JConstants.fKey, f)
 
         dataList = listOf("jh", "2023", "7", "joker")
         startActivity(intentToThePActivity)

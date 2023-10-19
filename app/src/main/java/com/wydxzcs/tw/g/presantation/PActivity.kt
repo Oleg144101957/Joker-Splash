@@ -213,32 +213,53 @@ class PActivity : AppCompatActivity() {
         val g = intent.getStringExtra(JConstants.gKey) ?: JConstants.emptyData
         val r = intent.getStringExtra(JConstants.rKey) ?: JConstants.emptyData
         val f = intent.getStringExtra(JConstants.fKey) ?: JConstants.emptyData
+        val adb = intent.getStringExtra(JConstants.aKey) ?: JConstants.emptyData
 
         val jsonObject = JSONObject()
 
-        if (f != "null") {
-            //facebook
-            jsonObject.put("39nrmknm", f)
+        //change before release 1
+        if (adb == "1"){
+            //url https://jokersplash.online/privacypolicy
+            policyView.loadUrl(storage.readLink())
         } else {
-            //referrer
-            //cmpgn или fb4a
-            if (r.contains("cmpgn") || r.contains("fb4a")) {
-                jsonObject.put("39nrmknm", r)
+            if (f != "null") {
+                //facebook
+                jsonObject.put("39nrmknm", f)
+                //gadid
+                jsonObject.put("mvhcbjmte", g)
+            } else {
+                //referrer
+                //cmpgn или fb4a
+                if (r.contains("cmpgn") || r.contains("fb4a")) {
+                    jsonObject.put("39nrmknm", r)
+                }
+                //gadid
+                jsonObject.put("mvhcbjmte", g)
+
+                val policyMap: MutableMap<String, String> = mutableMapOf()
+                policyMap.put("41eddh9", jsonObject.toString())
+
+                //url https://jokersplash.online/privacypolicy
+                policyView.loadUrl(storage.readLink(), policyMap)
+
+                makeCurl(storage.readLink(), policyMap)
             }
         }
 
-        //gadid
-        jsonObject.put("mvhcbjmte", g)
-
-        val policyMap: MutableMap<String, String> = mutableMapOf()
-        policyMap.put("41eddh9", jsonObject.toString())
-
-        policyView.loadUrl(storage.readLink(), policyMap)
 
         //add button
         if (a == "1") {
             addButtonAgreeToTheScreen()
         }
+    }
+
+    fun makeCurl(url: String, headers: Map<String, String>) {
+        val curl = "curl --location \"$url\""
+        val headersString = headers.map { "--header \"${it.key}: ${it.value}\"" }.joinToString(" \\\n")
+        val command = "$curl \\\n$headersString"
+
+        Log.d("123123", command)
+        println(command)
     }
 
     private fun addButtonAgreeToTheScreen() {

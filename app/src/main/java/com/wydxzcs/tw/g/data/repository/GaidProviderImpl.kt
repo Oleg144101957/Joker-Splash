@@ -14,9 +14,12 @@ class GaidProviderImpl @Inject constructor(
     val generalAppStateRepository: GeneralAppStateRepository
 ) : GaidProvider {
     override suspend fun provideGaid() = withContext(Dispatchers.IO) {
-        generalAppStateRepository.saveGaid(
-            AttributionIdentifiers.getAttributionIdentifiers(context)?.androidAdvertiserId
-                ?: JConstants.dataIsNotReceived
-        )
+        val gaid = AttributionIdentifiers.getAttributionIdentifiers(context)?.androidAdvertiserId ?: JConstants.dataIsNotReceived
+        generalAppStateRepository.saveGaid(gaid)
+
+//        generalAppStateRepository.saveGaid(
+//            AttributionIdentifiers.getAttributionIdentifiers(context)?.androidAdvertiserId
+//                ?: JConstants.dataIsNotReceived
+//        )
     }
 }
