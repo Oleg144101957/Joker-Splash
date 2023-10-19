@@ -54,7 +54,6 @@ class LActivity : AppCompatActivity() {
 
     private fun mainChecker(){
         val dataFromStorage = storage.readLink()
-        Log.d("123123", "The data in MAIN CHECKER is $dataFromStorage")
 
         if (isNetworkAvailable() && dataFromStorage.startsWith("htt")){
             //client
@@ -73,10 +72,8 @@ class LActivity : AppCompatActivity() {
 
     private fun firstTimeListennerAndDataGetter(){
         val currentData = storage.readLink()
-        Log.d("123123", "firstTimeListennerAndDataGetter method DATA FIRTS TIME is $currentData")
 
         if (currentData == JConstants.dataIsNotReceived){
-            Log.d("123123", "firstTimeListennerAndDataGetter current data not received")
 
             lifecycleScope.launch {
                 (generalAppStateRepository as GeneralAppStateRepositoryImpl).statusFlow.collect {
