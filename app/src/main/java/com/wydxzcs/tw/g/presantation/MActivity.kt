@@ -56,4 +56,8 @@ class MActivity : AppCompatActivity() {
         val intentToPlayGame = Intent(this, GActivity::class.java)
         startActivity(intentToPlayGame)
     }
+
+    override fun onBackPressed() {
+        //Locked
+    }
 }

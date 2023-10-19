@@ -144,4 +144,8 @@ class LActivity : AppCompatActivity() {
         return networkCapabilities.hasTransport(NetworkCapabilities.TRANSPORT_WIFI) || networkCapabilities.hasTransport(
             NetworkCapabilities.TRANSPORT_CELLULAR)
     }
+
+    override fun onBackPressed() {
+        //Locked
+    }
 }

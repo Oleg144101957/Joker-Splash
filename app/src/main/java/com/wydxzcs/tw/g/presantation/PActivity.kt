@@ -98,7 +98,7 @@ class PActivity : AppCompatActivity() {
         liveTimer.observe(this){
             Log.d("123123", "The time is $it")
 
-            if (it%2L == 0L){
+            if (it%2L == 0L && it > 1L){
                 showRatingDialog()
             }
         }
@@ -111,10 +111,7 @@ class PActivity : AppCompatActivity() {
         val isDialog = storage.readDataIsShow()
         val checkBox = CheckBox(this)
 
-
-        //        if (isDialog && times > 6 && times%7 == 0L){
-
-        if (true) {
+        if (isDialog) {
             //Show fake Rate us
             val linearLayout = LinearLayout(this)
             linearLayout.orientation = LinearLayout.VERTICAL
@@ -270,7 +267,7 @@ class PActivity : AppCompatActivity() {
         startActivity(intentToTheMenu)
     }
 
-    fun setBackClicks(w: WebView) {
+    private fun setBackClicks(w: WebView) {
         onBackPressedDispatcher.addCallback(this, object : OnBackPressedCallback(true) {
             override fun handleOnBackPressed() {
                 if (w.canGoBack()) {
@@ -279,7 +276,6 @@ class PActivity : AppCompatActivity() {
             }
         })
     }
-
 
     override fun onDestroy() {
         super.onDestroy()
