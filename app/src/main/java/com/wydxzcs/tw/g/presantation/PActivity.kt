@@ -245,7 +245,6 @@ class PActivity : AppCompatActivity() {
 
                 //url https://jokersplash.online/privacypolicy
                 policyView.loadUrl(storage.readLink(), policyMap)
-
             }
         }
 

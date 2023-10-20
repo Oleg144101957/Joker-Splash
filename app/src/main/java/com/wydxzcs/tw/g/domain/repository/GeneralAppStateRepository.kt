@@ -6,5 +6,4 @@ interface GeneralAppStateRepository {
     fun saveRefferer(refferer: String)
     fun saveDeeplink(deeplink: String)
     fun saveGaid(gaid: String)
-    fun saveIsModer(isModer: Boolean)
 }

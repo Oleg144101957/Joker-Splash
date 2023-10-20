@@ -8,5 +8,4 @@ data class GeneralAppState(
     val refferer: String = JConstants.emptyData,
     val deeplink: String = JConstants.emptyData,
     val gaid: String = JConstants.emptyData,
-    val isModer: Boolean
 )

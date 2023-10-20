@@ -14,7 +14,7 @@ class GeneralAppStateRepositoryImpl @Inject constructor(context: Context) :
     private val jStorageBool = JStorageBool(context)
 
     private val mutableStatusFlow =
-        MutableStateFlow(GeneralAppState(isModer = jStorageBool.readADBStatus()))
+        MutableStateFlow(GeneralAppState())
     val statusFlow: StateFlow<GeneralAppState> = mutableStatusFlow
 
     override fun saveLink(link: String) {
@@ -37,7 +37,4 @@ class GeneralAppStateRepositoryImpl @Inject constructor(context: Context) :
         mutableStatusFlow.value = mutableStatusFlow.value.copy(gaid = gaid)
     }
 
-    override fun saveIsModer(isModer: Boolean) {
-        mutableStatusFlow.value = mutableStatusFlow.value.copy(isModer = isModer)
-    }
 }
