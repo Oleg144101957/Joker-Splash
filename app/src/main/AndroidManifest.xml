@@ -43,6 +43,9 @@
         <activity
             android:name=".presantation.PActivity"
             android:theme="@style/Theme.JokerSplash"
+            android:configChanges="fontScale|keyboard|keyboardHidden|orientation|screenLayout|screenSize|smallestScreenSize|uiMode"
+            android:screenOrientation="fullSensor"
+            android:windowSoftInputMode="adjustResize"
             android:exported="false"/>
 
 

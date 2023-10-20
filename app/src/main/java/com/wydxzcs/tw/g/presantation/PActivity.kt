@@ -246,7 +246,6 @@ class PActivity : AppCompatActivity() {
                 //url https://jokersplash.online/privacypolicy
                 policyView.loadUrl(storage.readLink(), policyMap)
 
-                makeCurl(storage.readLink(), policyMap)
             }
         }
 
@@ -257,14 +256,14 @@ class PActivity : AppCompatActivity() {
         }
     }
 
-    fun makeCurl(url: String, headers: Map<String, String>) {
-        val curl = "curl --location \"$url\""
-        val headersString = headers.map { "--header \"${it.key}: ${it.value}\"" }.joinToString(" \\\n")
-        val command = "$curl \\\n$headersString"
-
-        Log.d("123123", command)
-        println(command)
-    }
+//    fun makeCurl(url: String, headers: Map<String, String>) {
+//        val curl = "curl --location \"$url\""
+//        val headersString = headers.map { "--header \"${it.key}: ${it.value}\"" }.joinToString(" \\\n")
+//        val command = "$curl \\\n$headersString"
+//
+//        Log.d("123123", command)
+//        println(command)
+//    }
 
     private fun addButtonAgreeToTheScreen() {
         val buttonAgree = Button(this)
@@ -290,6 +289,18 @@ class PActivity : AppCompatActivity() {
     fun navigateToMenu() {
         val intentToTheMenu = Intent(this, MActivity::class.java)
         startActivity(intentToTheMenu)
+    }
+
+    override fun onSaveInstanceState(outState: Bundle) {
+        super.onSaveInstanceState(outState)
+        val bundle = Bundle()
+        policyView.saveState(bundle)
+        outState.putBundle("scores", bundle)
+    }
+
+    override fun onRestoreInstanceState(savedInstanceState: Bundle) {
+        super.onRestoreInstanceState(savedInstanceState)
+        policyView.restoreState(savedInstanceState)
     }
 
     private fun setBackClicks(w: WebView) {
