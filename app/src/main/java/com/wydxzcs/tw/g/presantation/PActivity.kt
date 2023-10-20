@@ -37,7 +37,7 @@ class PActivity : AppCompatActivity() {
 
     private lateinit var policyView: PolicyWebView
     private lateinit var storage: JStorageBool
-    private val liveDeli: MutableLiveData<String> = MutableLiveData()
+    private lateinit var  liveDeli: MutableLiveData<String>
 
 
     //Timer
@@ -46,11 +46,14 @@ class PActivity : AppCompatActivity() {
 
     private val timerRunnable: Runnable = object : Runnable {
         override fun run() {
-            liveTimer.value = liveTimer.value?.plus(1L)
+
+            val currentMinutes = liveTimer.value ?: 0L
+
+            liveTimer.value = currentMinutes + 1L
+            storage.saveActiveMinutes(currentMinutes + 1)
             timerHandler.postDelayed(this, 60000) // run every minute
         }
     }
-
 
 
     override fun onCreate(savedInstanceState: Bundle?) {
@@ -60,6 +63,7 @@ class PActivity : AppCompatActivity() {
         setContentView(binding.root)
 
         liveTimer = MutableLiveData(storage.readActiveMinutes())
+        liveDeli = MutableLiveData(storage.readADBStatus())
 
         Log.d("123123", "onCreate method POLICY ACTIVITY")
 

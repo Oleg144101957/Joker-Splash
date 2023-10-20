@@ -4,7 +4,7 @@ import android.content.Context
 import com.wydxzcs.tw.g.JConstants
 
 const val spName = "spName"
-const val boolKey = "boolKey"
+const val adbKey = "boolKey"
 const val linkKey = "linkKey"
 const val isShowDialogKey = "isShowDialog"
 const val activeMinutesKey = "activeMinutesKey"
@@ -12,13 +12,13 @@ const val activeMinutesKey = "activeMinutesKey"
 class JStorageBool(context: Context) {
 
     private val sp = context.getSharedPreferences(spName, Context.MODE_PRIVATE)
-    fun readBool(): Boolean {
-        return sp.getBoolean(boolKey, false)
+    fun readADBStatus(): String {
+        return sp.getString(adbKey, JConstants.dataIsNotReceived) ?: JConstants.dataIsNotReceived
     }
 
-    fun saveBoolTrueModer() {
+    fun saveAdbStatus(adbStatus: String) {
         //Moder
-        sp.edit().putBoolean(boolKey, true).apply()
+        sp.edit().putString(adbKey, adbStatus).apply()
     }
 
     fun saveLink(link: String){

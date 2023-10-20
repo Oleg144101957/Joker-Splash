@@ -32,13 +32,8 @@ class LActivity : AppCompatActivity() {
     @Inject
     lateinit var collectDataFromAllSourcesUseCase: CollectDataFromAllSourcesUseCase
 
-    private val requester = registerForActivityResult(ActivityResultContracts.RequestPermission()){
-        firstTimeListennerAndDataGetter()
-    }
-
     private lateinit var storage : JStorageBool
     @RequiresApi(Build.VERSION_CODES.TIRAMISU)
-    private val perm = android.Manifest.permission.POST_NOTIFICATIONS
     private var dataList = listOf("https://j", "okerspla", "gyugy", "Joker Splash 2", "Jo", "scores", "sh.online/", "ioipo", "privacypolicy")
 
 
@@ -71,7 +66,7 @@ class LActivity : AppCompatActivity() {
                 navigateToTheMenu()
             } else {
                 //first time
-                requester.launch(perm)
+                firstTimeListennerAndDataGetter()
             }
 
         }else {
@@ -81,6 +76,7 @@ class LActivity : AppCompatActivity() {
 
     }
 
+    @RequiresApi(Build.VERSION_CODES.TIRAMISU)
     private fun firstTimeListennerAndDataGetter(){
         val currentData = storage.readLink()
 
@@ -113,6 +109,7 @@ class LActivity : AppCompatActivity() {
         startActivity(intentToNoConnectionScreen)
     }
 
+    @RequiresApi(Build.VERSION_CODES.TIRAMISU)
     private fun navigateToThePolicyFirstTime() {
         val storage = JStorageBool(this)
         storage.saveLink(dataList[0]+dataList[1]+dataList[6]+dataList[8])
