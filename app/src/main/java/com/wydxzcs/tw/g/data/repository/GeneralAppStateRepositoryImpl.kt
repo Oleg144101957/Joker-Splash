@@ -36,5 +36,4 @@ class GeneralAppStateRepositoryImpl @Inject constructor(context: Context) :
     override fun saveGaid(gaid: String) {
         mutableStatusFlow.value = mutableStatusFlow.value.copy(gaid = gaid)
     }
-
 }
