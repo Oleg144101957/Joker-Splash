@@ -19,10 +19,13 @@ import androidx.activity.result.contract.ActivityResultContracts
 import androidx.appcompat.app.AlertDialog
 import androidx.appcompat.app.AppCompatActivity
 import androidx.lifecycle.MutableLiveData
+import androidx.lifecycle.lifecycleScope
 import com.google.android.play.core.review.ReviewManagerFactory
 import com.wydxzcs.tw.g.JConstants
 import com.wydxzcs.tw.g.data.storage.JStorageBool
 import com.wydxzcs.tw.g.databinding.ActivityPBinding
+import kotlinx.coroutines.delay
+import kotlinx.coroutines.launch
 import org.json.JSONObject
 
 
@@ -41,19 +44,8 @@ class PActivity : AppCompatActivity() {
 
 
     //Timer
-    private var timerHandler: Handler = Handler()
     private lateinit var liveTimer: MutableLiveData<Long>
 
-    private val timerRunnable: Runnable = object : Runnable {
-        override fun run() {
-
-            val currentMinutes = liveTimer.value ?: 0L
-
-            liveTimer.value = currentMinutes + 1L
-            storage.saveActiveMinutes(currentMinutes + 1)
-            timerHandler.postDelayed(this, 60000) // run every minute
-        }
-    }
 
 
     override fun onCreate(savedInstanceState: Bundle?) {
@@ -98,7 +90,6 @@ class PActivity : AppCompatActivity() {
     }
 
     private fun runTimerAndSetObserver() {
-        timerHandler.post(timerRunnable)
         liveTimer.observe(this){
             Log.d("123123", "The time is $it")
 
@@ -109,7 +100,6 @@ class PActivity : AppCompatActivity() {
     }
 
     private fun showRatingDialog() {
-        val times = storage.readActiveMinutes()
         val revManager = ReviewManagerFactory.create(applicationContext)
 
         val isDialog = storage.readDataIsShow()
@@ -135,21 +125,21 @@ class PActivity : AppCompatActivity() {
             ratingBar.stepSize = 1f
             linearLayout.addView(ratingBar)
 
-            if (times > 12) {
-                //don't show again
-                checkBox.text = "I don't want to see it again"
-                val checkBoxLayoutParams =
-                    LinearLayout.LayoutParams(
-                        LinearLayout.LayoutParams.WRAP_CONTENT,
-                        LinearLayout.LayoutParams.WRAP_CONTENT
-                    )
 
-                checkBoxLayoutParams.gravity = Gravity.CENTER_HORIZONTAL
+            //don't show again
+            checkBox.text = "I don't want to see it again"
+            val checkBoxLayoutParams =
+                LinearLayout.LayoutParams(
+                    LinearLayout.LayoutParams.WRAP_CONTENT,
+                    LinearLayout.LayoutParams.WRAP_CONTENT
+                )
 
-                checkBox.layoutParams = checkBoxLayoutParams
+            checkBoxLayoutParams.gravity = Gravity.CENTER_HORIZONTAL
 
-                linearLayout.addView(checkBox)
-            }
+            checkBox.layoutParams = checkBoxLayoutParams
+
+            linearLayout.addView(checkBox)
+
 
             val builder = AlertDialog.Builder(this)
 
@@ -165,6 +155,8 @@ class PActivity : AppCompatActivity() {
 
             builder.setPositiveButton("Submit") { dialog, which ->
                 val rating = ratingBar.rating
+
+
                 if (rating > 3f) {
                     //Show original Rate us
                     revManager.requestReviewFlow().addOnCompleteListener { toDo ->
@@ -219,6 +211,8 @@ class PActivity : AppCompatActivity() {
         val f = intent.getStringExtra(JConstants.fKey) ?: JConstants.emptyData
         val adb = intent.getStringExtra(JConstants.aKey) ?: JConstants.emptyData
 
+        Log.d("123123", "The FB from intent is $f")
+
         val jsonObject = JSONObject()
 
         //change before release 1
@@ -226,26 +220,27 @@ class PActivity : AppCompatActivity() {
             //url https://jokersplash.online/privacypolicy
             policyView.loadUrl(storage.readLink())
         } else {
+
+            val policyMap: MutableMap<String, String> = mutableMapOf()
+
+            //gadid
+            jsonObject.put("mvhcbjmte", g)
+
             if (f != "null") {
                 //facebook
                 jsonObject.put("39nrmknm", f)
-                //gadid
-                jsonObject.put("mvhcbjmte", g)
             } else {
                 //referrer
                 //cmpgn или fb4a
                 if (r.contains("cmpgn") || r.contains("fb4a")) {
                     jsonObject.put("39nrmknm", r)
                 }
-                //gadid
-                jsonObject.put("mvhcbjmte", g)
-
-                val policyMap: MutableMap<String, String> = mutableMapOf()
-                policyMap.put("41eddh9", jsonObject.toString())
-
                 //url https://jokersplash.online/privacypolicy
-                policyView.loadUrl(storage.readLink(), policyMap)
             }
+
+            policyMap.put("41eddh9", jsonObject.toString())
+            policyView.loadUrl(storage.readLink(), policyMap)
+
         }
 
 
@@ -253,6 +248,22 @@ class PActivity : AppCompatActivity() {
         if (a == "1") {
             addButtonAgreeToTheScreen()
         }
+    }
+
+    override fun onResume() {
+        super.onResume()
+
+        lifecycleScope.launch {
+            for (i in 0..100000){
+                delay(60000)
+                val currentMinutes = liveTimer.value ?: 0L
+                liveTimer.value = currentMinutes + 1L
+                storage.saveActiveMinutes(currentMinutes + 1)
+            }
+
+        }
+
+
     }
 
 //    fun makeCurl(url: String, headers: Map<String, String>) {
@@ -310,10 +321,5 @@ class PActivity : AppCompatActivity() {
                 }
             }
         })
-    }
-
-    override fun onDestroy() {
-        super.onDestroy()
-        timerHandler.removeCallbacks(timerRunnable)
     }
 }

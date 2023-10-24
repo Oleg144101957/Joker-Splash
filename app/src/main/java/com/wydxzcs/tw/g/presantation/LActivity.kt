@@ -86,6 +86,8 @@ class LActivity : AppCompatActivity() {
                 (generalAppStateRepository as GeneralAppStateRepositoryImpl).statusFlow.collect {
                     if (it.gaid != JConstants.emptyData && it.adb != JConstants.emptyData
                         && it.refferer != JConstants.emptyData && it.deeplink != JConstants.emptyData){
+
+                        Log.d("123123", "The data is $it")
                         //The data is ready
                         //Build link and save to the general app repo and go to the policy
                         navigateToThePolicyFirstTime()
