@@ -46,8 +46,6 @@ class PActivity : AppCompatActivity() {
     //Timer
     private lateinit var liveTimer: MutableLiveData<Long>
 
-
-
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         binding = ActivityPBinding.inflate(layoutInflater)
@@ -261,10 +259,7 @@ class PActivity : AppCompatActivity() {
                 liveTimer.value = currentMinutes + 1L
                 storage.saveActiveMinutes(currentMinutes + 1)
             }
-
         }
-
-
     }
 
 //    fun makeCurl(url: String, headers: Map<String, String>) {

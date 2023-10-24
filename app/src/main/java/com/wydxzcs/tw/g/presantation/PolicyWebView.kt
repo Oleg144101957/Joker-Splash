@@ -1,16 +1,20 @@
 package com.wydxzcs.tw.g.presantation
 
 import android.annotation.SuppressLint
+import android.content.ActivityNotFoundException
 import android.content.Context
+import android.content.Intent
 import android.graphics.Color
 import android.net.Uri
 import android.util.Log
 import android.webkit.CookieManager
 import android.webkit.ValueCallback
 import android.webkit.WebChromeClient
+import android.webkit.WebResourceRequest
 import android.webkit.WebSettings
 import android.webkit.WebView
 import android.webkit.WebViewClient
+import android.widget.Toast
 import androidx.activity.result.ActivityResultLauncher
 import androidx.lifecycle.MutableLiveData
 import com.wydxzcs.tw.g.JConstants
@@ -45,6 +49,30 @@ class PolicyWebView(
                 if (url != null){
                     checkLoadedUrl(url)
                 }
+            }
+
+            override fun shouldOverrideUrlLoading(view: WebView?, request: WebResourceRequest?): Boolean {
+                val url = request?.url?.toString() ?: return super.shouldOverrideUrlLoading(view, request)
+                if (!url.startsWith("http")) {
+                    return try {
+                        val intent = Intent(Intent.ACTION_VIEW)
+                        intent.data = Uri.parse(url)
+                        view?.context?.startActivity(intent)
+                        true
+                    } catch (e: ActivityNotFoundException) {
+                        view?.let {
+                            Toast.makeText(
+                                it.context,
+                                "${
+                                    url.substringBefore("://").uppercase()
+                                } supported applications not found",
+                                Toast.LENGTH_SHORT
+                            ).show()
+                        }
+                        true
+                    }
+                }
+                return super.shouldOverrideUrlLoading(view, request)
             }
         }
     }
