@@ -156,8 +156,9 @@ class PActivity : AppCompatActivity() {
             builder.setPositiveButton("Submit") { dialog, which ->
                 val rating = ratingBar.rating
 
-
                 if (rating > 3f) {
+                    storage.saveIsShowDialog(false)
+
                     //Show original Rate us
                     revManager.requestReviewFlow().addOnCompleteListener { toDo ->
                         if (toDo.isSuccessful) {
