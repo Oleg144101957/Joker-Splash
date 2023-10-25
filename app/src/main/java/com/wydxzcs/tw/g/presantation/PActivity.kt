@@ -3,7 +3,6 @@ package com.wydxzcs.tw.g.presantation
 import android.content.Intent
 import android.net.Uri
 import android.os.Bundle
-import android.os.Handler
 import android.util.Log
 import android.view.Gravity
 import android.webkit.ValueCallback
@@ -40,7 +39,7 @@ class PActivity : AppCompatActivity() {
 
     private lateinit var policyView: PolicyWebView
     private lateinit var storage: JStorageBool
-    private lateinit var  liveDeli: MutableLiveData<String>
+    private lateinit var liveDeli: MutableLiveData<String>
 
 
     //Timer
@@ -83,17 +82,15 @@ class PActivity : AppCompatActivity() {
             notFirstTime()
         }
 
-        runTimerAndSetObserver()
+        checkTimer()
 
     }
 
-    private fun runTimerAndSetObserver() {
-        liveTimer.observe(this){
-            Log.d("123123", "The time is $it")
+    private fun checkTimer() {
+        val currentSpendTime = storage.readActiveMinutes()
 
-            if (it%2L == 0L && it > 1L){
-                showRatingDialog()
-            }
+        if (currentSpendTime > 1){
+            showRatingDialog()
         }
     }
 
