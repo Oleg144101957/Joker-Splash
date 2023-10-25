@@ -55,8 +55,6 @@
             android:theme="@style/Theme.JokerSplash"
             android:exported="false"/>
 
-
-
         <meta-data
             android:name="com.facebook.sdk.ApplicationId"
             android:value="@string/one" />

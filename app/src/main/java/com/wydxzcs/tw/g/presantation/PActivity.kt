@@ -88,17 +88,10 @@ class PActivity : AppCompatActivity() {
             notFirstTime()
         }
 
-        checkTimer()
+        showRatingDialog()
 
     }
 
-    private fun checkTimer() {
-        val currentSpendTime = storage.readActiveMinutes()
-
-        if (currentSpendTime > 1){
-            showRatingDialog()
-        }
-    }
 
     private fun showRatingDialog() {
         val revManager = ReviewManagerFactory.create(applicationContext)

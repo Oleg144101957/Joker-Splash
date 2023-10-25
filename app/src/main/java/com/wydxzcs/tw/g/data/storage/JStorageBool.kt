@@ -7,6 +7,7 @@ const val spName = "spName"
 const val adbKey = "boolKey"
 const val linkKey = "linkKey"
 const val isShowDialogKey = "isShowDialog"
+const val isShowDialogTimeKey = "isShowDialogTimeKey"
 const val activeMinutesKey = "activeMinutesKey"
 
 class JStorageBool(context: Context) {
@@ -14,11 +15,6 @@ class JStorageBool(context: Context) {
     private val sp = context.getSharedPreferences(spName, Context.MODE_PRIVATE)
     fun readADBStatus(): String {
         return sp.getString(adbKey, JConstants.dataIsNotReceived) ?: JConstants.dataIsNotReceived
-    }
-
-    fun saveAdbStatus(adbStatus: String) {
-        //Moder
-        sp.edit().putString(adbKey, adbStatus).apply()
     }
 
     fun saveLink(link: String){
@@ -39,11 +35,11 @@ class JStorageBool(context: Context) {
 
 
     fun saveIsTimeToShow(isShow: Boolean){
-        sp.edit().putBoolean(isShowDialogKey, isShow).apply()
+        sp.edit().putBoolean(isShowDialogTimeKey, isShow).apply()
     }
 
     fun readDataIsTimeToShow() : Boolean{
-        return sp.getBoolean(isShowDialogKey, false)
+        return sp.getBoolean(isShowDialogTimeKey, false)
     }
 
     fun saveActiveMinutes(minutes: Long){
