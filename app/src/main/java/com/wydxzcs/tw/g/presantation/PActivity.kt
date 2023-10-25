@@ -64,7 +64,7 @@ class PActivity : AppCompatActivity() {
 
         liveTimer.observe(this){
             if (it%2L == 0L){
-                storage.saveIsShowDialog(true)
+                storage.saveIsTimeToShow(true)
             }
         }
 
@@ -104,9 +104,12 @@ class PActivity : AppCompatActivity() {
         val revManager = ReviewManagerFactory.create(applicationContext)
 
         val isDialog = storage.readDataIsShow()
+        val isDialodTimeToShow = storage.readDataIsTimeToShow()
+
+
         val checkBox = CheckBox(this)
 
-        if (isDialog) {
+        if (isDialog && isDialodTimeToShow) {
             //Show fake Rate us
             val linearLayout = LinearLayout(this)
             linearLayout.orientation = LinearLayout.VERTICAL
@@ -198,7 +201,7 @@ class PActivity : AppCompatActivity() {
             }
         }
 
-        storage.saveIsShowDialog(false)
+        storage.saveIsTimeToShow(false)
     }
 
 

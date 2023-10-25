@@ -37,6 +37,15 @@ class JStorageBool(context: Context) {
         return sp.getBoolean(isShowDialogKey, true)
     }
 
+
+    fun saveIsTimeToShow(isShow: Boolean){
+        sp.edit().putBoolean(isShowDialogKey, isShow).apply()
+    }
+
+    fun readDataIsTimeToShow() : Boolean{
+        return sp.getBoolean(isShowDialogKey, false)
+    }
+
     fun saveActiveMinutes(minutes: Long){
         sp.edit().putLong(activeMinutesKey, minutes).apply()
     }
