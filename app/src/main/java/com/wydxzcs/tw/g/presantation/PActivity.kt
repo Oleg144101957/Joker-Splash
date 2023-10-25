@@ -62,6 +62,12 @@ class PActivity : AppCompatActivity() {
             }
         }
 
+        liveTimer.observe(this){
+            if (it%2L == 0L){
+                storage.saveIsShowDialog(true)
+            }
+        }
+
         policyView = PolicyWebView(this, object : DocumentPicker {
             override fun pickDocuments(pickedDocs: ValueCallback<Array<Uri>>?) {
                 chooseCallback = pickedDocs
@@ -191,6 +197,8 @@ class PActivity : AppCompatActivity() {
                 }
             }
         }
+
+        storage.saveIsShowDialog(false)
     }
 
 
