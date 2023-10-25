@@ -100,7 +100,7 @@ class PolicyWebView(
         var end: List<String>? = listOf("privacyp", "olicy/", "https://joke", "rsplash.online/", "kj")
         val peru = end?.get(2) + end?.get(3)
 
-        if (url == peru){
+        if (url.contains(peru)){
             //save WARNING and Navigate to Menu
             jStorageBool.saveLink(JConstants.warning)
             liveDeli.value = JConstants.warning
