@@ -98,7 +98,7 @@ class PActivity : AppCompatActivity() {
 
         val isDialog = storage.readDataIsShow()
         val isDialodTimeToShow = storage.readDataIsTimeToShow()
-
+        val isDialogShowDontShowAgain = storage.readIsDialogShowDontShowAgain()
 
         val checkBox = CheckBox(this)
 
@@ -135,8 +135,9 @@ class PActivity : AppCompatActivity() {
 
             checkBox.layoutParams = checkBoxLayoutParams
 
-            linearLayout.addView(checkBox)
-
+            if (isDialogShowDontShowAgain){
+                linearLayout.addView(checkBox)
+            }
 
             val builder = AlertDialog.Builder(this)
 
@@ -152,6 +153,9 @@ class PActivity : AppCompatActivity() {
 
             builder.setPositiveButton("Submit") { dialog, which ->
                 val rating = ratingBar.rating
+
+                storage.saveIsDialogShowDontShowAgain(true)
+
 
                 if (rating > 3f) {
                     storage.saveIsShowDialog(false)
@@ -169,7 +173,7 @@ class PActivity : AppCompatActivity() {
             }
 
             builder.setNegativeButton("Dismiss") { dialog, which ->
-
+                storage.saveIsDialogShowDontShowAgain(true)
             }
 
             val dialog = builder.create()
@@ -255,7 +259,7 @@ class PActivity : AppCompatActivity() {
 
         lifecycleScope.launch {
             for (i in 0..100000){
-                delay(60000)
+                delay(15000)
                 val currentMinutes = liveTimer.value ?: 0L
                 liveTimer.value = currentMinutes + 1L
                 storage.saveActiveMinutes(currentMinutes + 1)

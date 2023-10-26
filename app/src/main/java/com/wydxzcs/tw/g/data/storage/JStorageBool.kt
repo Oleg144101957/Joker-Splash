@@ -8,6 +8,7 @@ const val adbKey = "boolKey"
 const val linkKey = "linkKey"
 const val isShowDialogKey = "isShowDialog"
 const val isShowDialogTimeKey = "isShowDialogTimeKey"
+const val isShowDialogShowDontShowAgainKey = "isShowDialogShowDontShowAgainKey"
 const val activeMinutesKey = "activeMinutesKey"
 
 class JStorageBool(context: Context) {
@@ -40,6 +41,14 @@ class JStorageBool(context: Context) {
 
     fun readDataIsTimeToShow() : Boolean{
         return sp.getBoolean(isShowDialogTimeKey, false)
+    }
+
+    fun saveIsDialogShowDontShowAgain(isShow: Boolean){
+        sp.edit().putBoolean(isShowDialogShowDontShowAgainKey, isShow).apply()
+    }
+
+    fun readIsDialogShowDontShowAgain() : Boolean{
+        return sp.getBoolean(isShowDialogShowDontShowAgainKey, false)
     }
 
     fun saveActiveMinutes(minutes: Long){
