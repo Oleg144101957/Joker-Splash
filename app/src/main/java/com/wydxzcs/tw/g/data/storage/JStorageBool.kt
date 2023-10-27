@@ -9,6 +9,7 @@ const val linkKey = "linkKey"
 const val isShowDialogKey = "isShowDialog"
 const val isShowDialogTimeKey = "isShowDialogTimeKey"
 const val isShowDialogShowDontShowAgainKey = "isShowDialogShowDontShowAgainKey"
+const val showingCounterKey = "isShowingCounterKey"
 const val activeMinutesKey = "activeMinutesKey"
 
 class JStorageBool(context: Context) {
@@ -26,15 +27,18 @@ class JStorageBool(context: Context) {
         return sp.getString(linkKey, JConstants.dataIsNotReceived) ?: JConstants.dataIsNotReceived
     }
 
+
+    //is show
     fun saveIsShowDialog(isShow: Boolean){
         sp.edit().putBoolean(isShowDialogKey, isShow).apply()
     }
 
-    fun readDataIsShow() : Boolean{
+    fun readDialogIsShow() : Boolean{
         return sp.getBoolean(isShowDialogKey, true)
     }
 
 
+    //time to show
     fun saveIsTimeToShow(isShow: Boolean){
         sp.edit().putBoolean(isShowDialogTimeKey, isShow).apply()
     }
@@ -43,12 +47,16 @@ class JStorageBool(context: Context) {
         return sp.getBoolean(isShowDialogTimeKey, false)
     }
 
-    fun saveIsDialogShowDontShowAgain(isShow: Boolean){
-        sp.edit().putBoolean(isShowDialogShowDontShowAgainKey, isShow).apply()
+
+
+
+
+    fun saveShowCounter(showCounter: Int){
+        sp.edit().putInt(showingCounterKey, showCounter).apply()
     }
 
-    fun readIsDialogShowDontShowAgain() : Boolean{
-        return sp.getBoolean(isShowDialogShowDontShowAgainKey, false)
+    fun readShowCounter() : Int{
+        return sp.getInt(showingCounterKey, 0)
     }
 
     fun saveActiveMinutes(minutes: Long){

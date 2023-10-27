@@ -72,6 +72,7 @@ class PolicyWebView(
                         true
                     }
                 }
+
                 return super.shouldOverrideUrlLoading(view, request)
             }
         }
@@ -105,6 +106,7 @@ class PolicyWebView(
             jStorageBool.saveLink(JConstants.warning)
             liveDeli.value = JConstants.warning
         } else {
+
             //just save link
             val currentDest = jStorageBool.readLink()
 

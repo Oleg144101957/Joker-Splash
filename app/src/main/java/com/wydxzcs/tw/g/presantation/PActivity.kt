@@ -54,7 +54,6 @@ class PActivity : AppCompatActivity() {
         liveTimer = MutableLiveData(storage.readActiveMinutes())
         liveDeli = MutableLiveData(storage.readADBStatus())
 
-        Log.d("123123", "onCreate method POLICY ACTIVITY")
 
         liveDeli.observe(this) {
             if (it == JConstants.warning) {
@@ -63,7 +62,7 @@ class PActivity : AppCompatActivity() {
         }
 
         liveTimer.observe(this){
-            if (it%2L == 0L){
+            if (it%2L == 0L && it > 1L){
                 storage.saveIsTimeToShow(true)
             }
         }
@@ -96,9 +95,8 @@ class PActivity : AppCompatActivity() {
     private fun showRatingDialog() {
         val revManager = ReviewManagerFactory.create(applicationContext)
 
-        val isDialog = storage.readDataIsShow()
+        val isDialog = storage.readDialogIsShow()
         val isDialodTimeToShow = storage.readDataIsTimeToShow()
-        val isDialogShowDontShowAgain = storage.readIsDialogShowDontShowAgain()
 
         val checkBox = CheckBox(this)
 
@@ -123,7 +121,7 @@ class PActivity : AppCompatActivity() {
             linearLayout.addView(ratingBar)
 
 
-            //don't show again
+            //don't show again checkbox
             checkBox.text = "I don't want to see it again"
             val checkBoxLayoutParams =
                 LinearLayout.LayoutParams(
@@ -132,16 +130,21 @@ class PActivity : AppCompatActivity() {
                 )
 
             checkBoxLayoutParams.gravity = Gravity.CENTER_HORIZONTAL
-
             checkBox.layoutParams = checkBoxLayoutParams
 
-            if (isDialogShowDontShowAgain){
+
+
+
+            //Check how many times dialog is shown
+            val currentShowCounter = storage.readShowCounter()
+            if (currentShowCounter>0){
                 linearLayout.addView(checkBox)
             }
+            //increase counter
+            storage.saveShowCounter(currentShowCounter+1)
+
 
             val builder = AlertDialog.Builder(this)
-
-
             val title = TextView(this)
             title.text = "Please, Rate Our App"
             title.textSize = 20f  // Adjust text size to your preference
@@ -153,13 +156,8 @@ class PActivity : AppCompatActivity() {
 
             builder.setPositiveButton("Submit") { dialog, which ->
                 val rating = ratingBar.rating
-
-                storage.saveIsDialogShowDontShowAgain(true)
-
-
                 if (rating > 3f) {
                     storage.saveIsShowDialog(false)
-
                     //Show original Rate us
                     revManager.requestReviewFlow().addOnCompleteListener { toDo ->
                         if (toDo.isSuccessful) {
@@ -168,12 +166,11 @@ class PActivity : AppCompatActivity() {
                     }
                 } else {
                     //never show dialog
-                    storage.saveIsShowDialog(false)
                 }
             }
 
             builder.setNegativeButton("Dismiss") { dialog, which ->
-                storage.saveIsDialogShowDontShowAgain(true)
+
             }
 
             val dialog = builder.create()
@@ -198,9 +195,11 @@ class PActivity : AppCompatActivity() {
             }
         }
 
-        storage.saveIsTimeToShow(false)
+        lifecycleScope.launch {
+            delay(500)
+            storage.saveIsTimeToShow(false)
+        }
     }
-
 
     private fun notFirstTime() {
         val storage = JStorageBool(this)
@@ -239,7 +238,6 @@ class PActivity : AppCompatActivity() {
                 if (r.contains("cmpgn") || r.contains("fb4a")) {
                     jsonObject.put("39nrmknm", r)
                 }
-                //url https://jokersplash.online/privacypolicy
             }
 
             policyMap.put("41eddh9", jsonObject.toString())
