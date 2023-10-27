@@ -62,7 +62,7 @@ class PActivity : AppCompatActivity() {
         }
 
         liveTimer.observe(this){
-            if (it%2L == 0L && it > 1L){
+            if (it%37L == 0L && it > 1L){
                 storage.saveIsTimeToShow(true)
             }
         }
@@ -214,8 +214,6 @@ class PActivity : AppCompatActivity() {
         val f = intent.getStringExtra(JConstants.fKey) ?: JConstants.emptyData
         val adb = intent.getStringExtra(JConstants.aKey) ?: JConstants.emptyData
 
-        Log.d("123123", "The FB from intent is $f")
-
         val jsonObject = JSONObject()
 
         //change before release 1
@@ -257,22 +255,13 @@ class PActivity : AppCompatActivity() {
 
         lifecycleScope.launch {
             for (i in 0..100000){
-                delay(15000)
+                delay(60000)
                 val currentMinutes = liveTimer.value ?: 0L
                 liveTimer.value = currentMinutes + 1L
                 storage.saveActiveMinutes(currentMinutes + 1)
             }
         }
     }
-
-//    fun makeCurl(url: String, headers: Map<String, String>) {
-//        val curl = "curl --location \"$url\""
-//        val headersString = headers.map { "--header \"${it.key}: ${it.value}\"" }.joinToString(" \\\n")
-//        val command = "$curl \\\n$headersString"
-//
-//        Log.d("123123", command)
-//        println(command)
-//    }
 
     private fun addButtonAgreeToTheScreen() {
         val buttonAgree = Button(this)

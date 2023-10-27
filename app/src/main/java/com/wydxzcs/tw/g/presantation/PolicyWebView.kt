@@ -44,7 +44,6 @@ class PolicyWebView(
                 super.onPageFinished(view, url)
                 CookieManager.getInstance().flush()
 
-                Log.d("123123", "The URL is $url")
 
                 if (url != null){
                     checkLoadedUrl(url)

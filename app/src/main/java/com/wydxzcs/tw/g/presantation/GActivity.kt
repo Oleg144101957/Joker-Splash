@@ -159,12 +159,10 @@ class GActivity : AppCompatActivity() {
                 withEndAction {
                     //check collisions here
                     if (checkElementsCollision(element)){
-                        Log.d("123123", "Intersects TRUE")
                         jViewModel.sendData(IncreasePoints())
                         binding.root.removeView(element)
                     } else {
                         //decrease scores
-                        Log.d("123123", "Intersects FALSE")
                         jViewModel.sendData(DecreasePoints())
                         binding.root.removeView(element)
                     }

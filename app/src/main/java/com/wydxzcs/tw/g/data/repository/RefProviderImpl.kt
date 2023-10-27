@@ -30,7 +30,6 @@ class RefProviderImpl @Inject constructor(
                         referrerClient.endConnection()
                         generalAppStateRepository.saveRefferer(result)
                     } catch (e: DeadObjectException) {
-                        Log.d("123123", "Refferer exception $e")
                         generalAppStateRepository.saveRefferer(JConstants.dataIsNotReceived)
                     }
 

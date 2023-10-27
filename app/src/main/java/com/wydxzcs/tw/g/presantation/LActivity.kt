@@ -46,8 +46,6 @@ class LActivity : AppCompatActivity() {
         (applicationContext as JApp).appComponent.inject(this)
         setContentView(binding.root)
 
-        Log.d("123123", "onCreate method LOADING ACTIVITY")
-
         mainChecker()
     }
 
@@ -87,7 +85,6 @@ class LActivity : AppCompatActivity() {
                     if (it.gaid != JConstants.emptyData && it.adb != JConstants.emptyData
                         && it.refferer != JConstants.emptyData && it.deeplink != JConstants.emptyData){
 
-                        Log.d("123123", "The data is $it")
                         //The data is ready
                         //Build link and save to the general app repo and go to the policy
                         navigateToThePolicyFirstTime()
